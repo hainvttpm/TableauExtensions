@@ -7,10 +7,10 @@
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Bảng ma trận (pivot/crosstab) header nhóm nhiều tầng — mẫu báo cáo KQKD (BUILD ZONE).</description>
-    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <author name="evn" email="evn@evn.com.vn" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
     <min-api-version>1.11</min-api-version>
     <source-location>
-      <url>https://sonnguyendataai.github.io/tableau-viz-extensions/src/vizzes/pivot-table/pivot-table.html</url>
+      <url>https://hainvttpm.github.io/TableauExtensions/vizzes/pivot-table/pivot-table.html</url>
     </source-location>
     <icon/>
 
