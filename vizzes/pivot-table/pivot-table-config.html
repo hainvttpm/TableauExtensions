@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Pivot Table — Configure</title>
+
+  <!-- Extensions API (vendored, MIT) — cần cho initializeDialogAsync + closeDialog. -->
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    :root { font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif; }
+    html, body { margin: 0; padding: 0; color: #333; }
+    body { padding: 16px 18px; box-sizing: border-box; }
+    h2 { font-size: 15px; margin: 0 0 4px; }
+    p.hint { font-size: 12px; color: #666; margin: 0 0 14px; }
+    .row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid #eee;
+    }
+    .row .name { flex: 1; font-size: 13px; }
+    .row input[type="text"] {
+      flex: 1; font-size: 13px; padding: 5px 7px;
+      border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+    }
+    .row input[type="color"] {
+      width: 38px; height: 28px; padding: 0; border: 1px solid #ccc;
+      border-radius: 4px; background: none; cursor: pointer;
+    }
+    .row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+    .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+    .actions .right { display: flex; gap: 8px; }
+    .actions button {
+      font-size: 13px; padding: 6px 16px; border-radius: 4px; cursor: pointer;
+      border: 1px solid #ccc; background: #fff;
+    }
+    .actions button.primary { background: #E8770C; border-color: #E8770C; color: #fff; }
+    .actions button.reset { border: none; background: none; color: #4e79a7; padding: 2px 4px; }
+  </style>
+</head>
+<body>
+  <h2>Cấu hình bảng</h2>
+  <p class="hint">Nhãn đơn vị (góc trên-trái), màu header và kẻ sọc xen kẽ. Lưu vào workbook.</p>
+
+  <div class="row">
+    <span class="name">Nhãn đơn vị (góc)</span>
+    <input type="text" id="cornerLabel" placeholder="ĐVT: Triệu VNĐ" />
+  </div>
+  <div class="row">
+    <span class="name">Màu nền header</span>
+    <input type="color" id="headerBg" />
+  </div>
+  <div class="row">
+    <span class="name">Màu chữ header</span>
+    <input type="color" id="headerText" />
+  </div>
+  <div class="row">
+    <span class="name">Kẻ sọc hàng xen kẽ</span>
+    <input type="checkbox" id="zebra" />
+  </div>
+
+  <div class="actions">
+    <button class="reset" id="reset">Khôi phục mặc định</button>
+    <div class="right">
+      <button id="cancel">Hủy</button>
+      <button id="apply" class="primary">Áp dụng</button>
+    </div>
+  </div>
+
+  <script>
+    /* global tableau */
+    tableau.extensions.initializeDialogAsync().then(function (payloadStr) {
+      var payload = {};
+      try { payload = JSON.parse(payloadStr || '{}'); } catch (e) { payload = {}; }
+      var d = payload.defaults || {};
+
+      var elCorner = document.getElementById('cornerLabel');
+      var elBg = document.getElementById('headerBg');
+      var elText = document.getElementById('headerText');
+      var elZebra = document.getElementById('zebra');
+
+      elCorner.value = payload.cornerLabel != null ? payload.cornerLabel : (d.cornerLabel || '');
+      elBg.value = normalizeHex(payload.headerBg || d.headerBg || '#E8770C');
+      elText.value = normalizeHex(payload.headerText || d.headerText || '#FFFFFF');
+      elZebra.checked = String(payload.zebra != null ? payload.zebra : (d.zebra || '1')) !== '0';
+
+      document.getElementById('reset').onclick = function () {
+        elCorner.value = d.cornerLabel || '';
+        elBg.value = normalizeHex(d.headerBg || '#E8770C');
+        elText.value = normalizeHex(d.headerText || '#FFFFFF');
+        elZebra.checked = String(d.zebra || '1') !== '0';
+      };
+
+      document.getElementById('apply').onclick = function () {
+        tableau.extensions.ui.closeDialog(JSON.stringify({
+          cornerLabel: elCorner.value,
+          headerBg: elBg.value,
+          headerText: elText.value,
+          zebra: elZebra.checked,
+        }));
+      };
+      document.getElementById('cancel').onclick = function () {
+        tableau.extensions.ui.closeDialog(''); // trả rỗng → extension giữ cấu hình cũ
+      };
+    });
+
+    // <input type="color"> chỉ nhận '#rrggbb'.
+    function normalizeHex(hex) {
+      if (typeof hex !== 'string') return '#e8770c';
+      var h = hex.trim().replace(/^#/, '');
+      if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+      if (!/^[0-9a-fA-F]{6}$/.test(h)) return '#e8770c';
+      return '#' + h.toLowerCase();
+    }
+  </script>
+</body>
+</html>

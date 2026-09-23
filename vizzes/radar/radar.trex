@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.radar" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Radar / spider chart — nhiều series, trục = category (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <!-- 1.11 = mặc định an toàn: đủ getSummaryDataReaderAsync + getVisualSpecificationAsync -->
+    <min-api-version>1.11</min-api-version>
+    <!-- URL localhost phải KHỚP CHÍNH XÁC đường dẫn dev server phục vụ.
+         npm start (http-server tại repo root, cổng 8765) → path này. -->
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/radar/radar.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Category: 1 dimension rời rạc → mỗi giá trị = 1 TRỤC (spoke) của radar -->
+    <encoding id="category">
+      <display-name>Category (axes)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Measures: 1..N measure liên tục → mỗi measure = 1 ĐA GIÁC (series) phủ radar -->
+    <encoding id="measures">
+      <display-name>Measures (series)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="6"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Radar Chart (Spider)</text>
+    </resource>
+  </resources>
+</manifest>

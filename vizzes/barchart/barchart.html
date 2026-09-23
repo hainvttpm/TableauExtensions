@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Bar Chart — Viz Platform Sample</title>
+
+  <!-- 1) D3 — VENDOR LOCAL (không CDN, chạy được air-gapped/on-prem). Nạp TRƯỚC code viz. -->
+  <script src="../../../lib/d3.v7.min.js"></script>
+
+  <!-- 2) Thư viện Extensions API (vendored, MIT) — BẮT BUỘC nạp trước barchart.js.
+          Dùng bản module .js để import trong barchart.js hoạt động. -->
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
+    #content { width: 100%; height: 100%; position: fixed; }
+    .viz-empty {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px; color: #666; text-align: center; padding: 0 24px;
+      box-sizing: border-box;
+    }
+    .bar { cursor: pointer; }
+    .bar-label { pointer-events: none; font-size: 11px; }
+    .axis-label { pointer-events: none; font-size: 11px; }
+  </style>
+</head>
+<body class="tableau-worksheet">
+  <div id="content"></div>
+
+  <!-- 3) Code viz (ES module) — chỉ chứa render() trong BUILD ZONE -->
+  <script type="module" src="./barchart.js"></script>
+</body>
+</html>

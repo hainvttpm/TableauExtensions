@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Báo cáo KQKD — Multi-measure</title>
+
+  <script src="../../../lib/d3.v7.min.js"></script>
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
+    #content { width: 100%; height: 100%; position: fixed; }
+
+    .viz-empty {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px; color: #666; text-align: center; padding: 0 24px; box-sizing: border-box;
+    }
+
+    .kq-scroll { width: 100%; height: 100%; overflow: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+
+    table.kq-table {
+      border-collapse: separate; border-spacing: 0; font-size: 12px; color: #333;
+      --kq-hdr-bg: #E8770C; --kq-hdr-bg2: #b85e08; --kq-hdr-text: #ffffff;
+    }
+    .kq-table th, .kq-table td {
+      border-right: 1px solid #d9d9d9; border-bottom: 1px solid #d9d9d9;
+      padding: 3px 8px; line-height: 16px; box-sizing: border-box; white-space: nowrap; background-clip: padding-box;
+    }
+    .kq-table thead tr:first-child th { border-top: 1px solid #d9d9d9; }
+    .kq-table th:first-child, .kq-table td:first-child { border-left: 1px solid #d9d9d9; }
+
+    .kq-colhdr, .kq-corner {
+      position: sticky; top: 0; background: var(--kq-hdr-bg); color: var(--kq-hdr-text);
+      font-weight: 600; text-align: center; z-index: 4;
+    }
+    .kq-collvl-0 { background: var(--kq-hdr-bg2); }
+    .kq-corner {
+      left: 0; z-index: 6; background: var(--kq-hdr-bg2); text-align: left; font-weight: 700; vertical-align: bottom;
+    }
+    .kq-corner .kq-unit { display: block; margin-bottom: 6px; }
+    .kq-corner select.kq-year {
+      font: inherit; font-weight: 600; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.6); background: #fff; color: #333; cursor: pointer;
+    }
+    .kq-corner .kq-paramnote { font-weight: 600; font-size: 12px; opacity: .95; }
+
+    .kq-rowhdr {
+      position: sticky; left: 0; background: #f5f5f5; text-align: left; font-weight: 600;
+      overflow: hidden; text-overflow: ellipsis; z-index: 3;
+    }
+
+    .kq-cell { text-align: right; font-variant-numeric: tabular-nums; cursor: pointer; }
+    .kq-alt .kq-cell { background: #f6f8fa; }
+    .kq-pct-up   { color: #1b7f3b; }
+    .kq-pct-down { color: #c62828; }
+    .kq-blank    { color: #bbb; }
+    .kq-sel { background: #fff3e0 !important; font-weight: 700; box-shadow: inset 0 0 0 2px var(--kq-hdr-bg); }
+  </style>
+</head>
+<body class="tableau-worksheet">
+  <div id="content"></div>
+  <script type="module" src="./kqkd-measures.js"></script>
+</body>
+</html>

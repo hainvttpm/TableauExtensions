@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.funnel" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Funnel / Treemap / Gauge (D3) — chart type from ?type= (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <min-api-version>1.11</min-api-version>
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/funnel-treemap/funnel-treemap.html?type=funnel</url>
+    </source-location>
+    <icon/>
+
+    <encoding id="category">
+      <display-name>Category (stage / slice)</display-name>
+      <role-spec><role-type>discrete-dimension</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+    <encoding id="value">
+      <display-name>Value</display-name>
+      <data-spec><data-type>numeric</data-type></data-spec>
+      <role-spec><role-type>continuous-measure</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="bar"/>
+    </encoding>
+    <encoding id="target">
+      <display-name>Target / max (gauge only)</display-name>
+      <data-spec><data-type>numeric</data-type></data-spec>
+      <role-spec><role-type>continuous-measure</role-type></role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="text"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name"><text locale="en_US">Funnel / Treemap / Gauge (D3)</text></resource>
+  </resources>
+</manifest>

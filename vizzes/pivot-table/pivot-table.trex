@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.pivottable" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Bảng ma trận (pivot/crosstab) header nhóm nhiều tầng — mẫu báo cáo KQKD (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <!-- 1.11 = mặc định an toàn: đủ getSummaryDataReaderAsync + getVisualSpecificationAsync -->
+    <min-api-version>1.11</min-api-version>
+    <!-- URL localhost phải KHỚP CHÍNH XÁC đường dẫn dev server phục vụ.
+         npm start (http-server tại repo root, cổng 8765) → path này. -->
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/pivot-table/pivot-table.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Rows: 1..N dimension rời rạc → header hàng lồng nhau bên TRÁI (mỗi field = 1 cấp).
+         Ví dụ báo cáo KQKD: 1 field "Chỉ tiêu" (Tổng thu thuần / +Thu thuần lãi / ...). -->
+    <encoding id="rows">
+      <display-name>Rows (nhãn hàng)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="5"/>
+      <encoding-icon token="letter-y"/>
+    </encoding>
+
+    <!-- Columns: 0..N dimension rời rạc → header cột NHÓM nhiều tầng bên TRÊN.
+         Ví dụ báo cáo KQKD: cấp ngoài "Nhóm so sánh" (Năm báo cáo / Cùng kỳ năm trước /
+         Tăng trưởng...) + cấp trong "Tháng" (Tháng 1..12). -->
+    <encoding id="cols">
+      <display-name>Columns (nhóm cột)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="5"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Values: 1..N measure → giá trị trong ô. Nhiều measure → thêm 1 tầng header
+         tên measure ở dưới cùng của khối cột. -->
+    <encoding id="values">
+      <display-name>Values (giá trị ô)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+        <role-type>discrete-measure</role-type>
+      </role-spec>
+      <fields max-count="10"/>
+      <encoding-icon token="text"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Pivot Table / Matrix (Platform Sample)</text>
+    </resource>
+  </resources>
+</manifest>

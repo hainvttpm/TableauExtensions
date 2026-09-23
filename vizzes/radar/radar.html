@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Radar Chart (Spider) — Viz Platform</title>
+
+  <!-- 1) D3 — VENDOR LOCAL (không CDN, chạy được air-gapped/on-prem).
+          Nạp TRƯỚC code viz. Xem docs/03-dev-loop.md §air-gapped. -->
+  <script src="../../../lib/d3.v7.min.js"></script>
+
+  <!-- 2) Thư viện Extensions API (vendored, MIT) — BẮT BUỘC nạp trước code viz. -->
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
+    #content { width: 100%; height: 100%; position: fixed; }
+    .viz-empty {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px; color: #666; text-align: center; padding: 0 24px;
+      box-sizing: border-box;
+    }
+    .radar-vertex { cursor: pointer; }
+    .radar-poly { pointer-events: none; }
+    .radar-grid, .radar-spoke { pointer-events: none; }
+    .axis-label, .value-label, .legend-label { pointer-events: none; font-size: 11px; }
+    .value-label-bg { pointer-events: none; }
+  </style>
+</head>
+<body class="tableau-worksheet">
+  <div id="content"></div>
+
+  <!-- 3) Code viz (ES module) — chỉ chứa render() trong BUILD ZONE -->
+  <script type="module" src="./radar.js"></script>
+</body>
+</html>

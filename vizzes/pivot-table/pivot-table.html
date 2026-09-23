@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Pivot Table / Matrix — Viz Platform Sample</title>
+
+  <!-- 1) D3 — VENDOR LOCAL (không CDN). Bảng này chỉ dùng vài helper của D3 (format),
+          nhưng giữ nạp để đồng nhất với các viz khác + dùng được khi cần. -->
+  <script src="../../../lib/d3.v7.min.js"></script>
+
+  <!-- 2) Thư viện Extensions API (vendored, MIT) — BẮT BUỘC nạp trước pivot-table.js. -->
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
+    #content { width: 100%; height: 100%; position: fixed; }
+
+    .viz-empty {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px; color: #666; text-align: center; padding: 0 24px;
+      box-sizing: border-box;
+    }
+
+    /* Vùng cuộn: header (thead) dính trên, cột nhãn hàng dính trái. */
+    .pv-scroll {
+      width: 100%; height: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+    }
+
+    table.pv-table {
+      border-collapse: separate;   /* separate + border-spacing:0 → sticky không hở viền */
+      border-spacing: 0;
+      font-size: 12px;
+      color: #333;
+      /* Các biến màu header do render() set theo cấu hình (Configure...). */
+      --pv-hdr-bg:  #E8770C;
+      --pv-hdr-bg2: #b85e08;
+      --pv-hdr-text:#ffffff;
+    }
+
+    /* --- Ô chung --- */
+    .pv-table th, .pv-table td {
+      border-right: 1px solid #d9d9d9;
+      border-bottom: 1px solid #d9d9d9;
+      padding: 3px 8px;
+      line-height: 16px;
+      box-sizing: border-box;
+      white-space: nowrap;
+      background-clip: padding-box; /* viền không bị nền sticky đè */
+    }
+    /* Viền trái/trên ở mép bảng cho khép khung. */
+    .pv-table thead tr:first-child th { border-top: 1px solid #d9d9d9; }
+    .pv-table th:first-child, .pv-table td:first-child { border-left: 1px solid #d9d9d9; }
+
+    /* --- Header cột (thead) — dính trên, nền cam --- */
+    .pv-colhdr, .pv-meashdr, .pv-corner {
+      position: sticky; top: 0;
+      background: var(--pv-hdr-bg);
+      color: var(--pv-hdr-text);
+      font-weight: 600;
+      text-align: center;
+      z-index: 4;
+    }
+    /* Cấp cột NGOÀI CÙNG (nhóm so sánh) đậm hơn để phân tầng. */
+    .pv-collvl-0 { background: var(--pv-hdr-bg2); }
+    .pv-meashdr  { font-weight: 500; font-style: italic; }
+
+    /* Ô góc trên-trái (chứa nhãn đơn vị "ĐVT: ...") — dính cả trên lẫn trái. */
+    .pv-corner {
+      left: 0; z-index: 6;
+      background: var(--pv-hdr-bg2);
+      text-align: left;
+      font-weight: 700;
+      vertical-align: bottom;
+    }
+
+    /* Chip header field dòng (kéo-thả đổi thứ tự) — nằm trong dải góc, dính trái. */
+    .pv-fieldhdr { vertical-align: top; }
+    .pv-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      cursor: grab; user-select: none; -webkit-user-select: none;
+      max-width: 100%;
+    }
+    .pv-chip:active { cursor: grabbing; }
+    .pv-grip { opacity: .75; font-size: 13px; line-height: 1; letter-spacing: -1px; }
+    .pv-fieldname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pv-unit { margin-top: 5px; font-weight: 700; font-size: 11px; opacity: .95; }
+
+    /* Trạng thái kéo-thả: nguồn mờ đi; đích hiện đường chèn (viền trái đứt). */
+    .pv-dragging { opacity: .4; }
+    .pv-drop-target { outline: 2px dashed #fff; outline-offset: -3px; }
+    .pv-drop-target::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 0;
+      width: 3px; background: #fff;
+    }
+
+    /* --- Header hàng (nhãn bên trái) — dính trái, nền sáng --- */
+    .pv-rowhdr {
+      position: sticky;
+      background: #ffffff;
+      text-align: left;
+      vertical-align: top;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 3;
+    }
+    .pv-rowlvl-0 { background: #f5f5f5; font-weight: 600; }
+
+    /* --- Ô giá trị --- */
+    .pv-cell { text-align: right; font-variant-numeric: tabular-nums; cursor: pointer; }
+    .pv-alt .pv-cell { background: #f6f8fa; }
+
+    /* Ô được chọn (selection) — nổi bật; fog các ô khác do render() set màu chữ. */
+    .pv-sel {
+      background: #fff3e0 !important;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 2px var(--pv-hdr-bg);
+    }
+  </style>
+</head>
+<body class="tableau-worksheet">
+  <div id="content"></div>
+
+  <!-- 3) Code viz (ES module) — chỉ chứa render() trong BUILD ZONE -->
+  <script type="module" src="./pivot-table.js"></script>
+</body>
+</html>

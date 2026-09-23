@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Radar — Configure Colors</title>
+
+  <!-- Extensions API (vendored, MIT) — cần cho initializeDialogAsync + closeDialog. -->
+  <script src="../../../lib/tableau.extensions.1.latest.js"></script>
+
+  <style>
+    :root { font-family: 'Benton Sans', 'Helvetica Neue', Arial, sans-serif; }
+    html, body { margin: 0; padding: 0; color: #333; }
+    body { padding: 16px 18px; box-sizing: border-box; }
+    h2 { font-size: 15px; margin: 0 0 4px; }
+    p.hint { font-size: 12px; color: #666; margin: 0 0 14px; }
+    .row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid #eee;
+    }
+    .row .name { flex: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .row input[type="color"] {
+      width: 38px; height: 28px; padding: 0; border: 1px solid #ccc;
+      border-radius: 4px; background: none; cursor: pointer;
+    }
+    .row button.reset {
+      font-size: 11px; color: #4e79a7; background: none; border: none;
+      cursor: pointer; padding: 2px 4px;
+    }
+    .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .actions button {
+      font-size: 13px; padding: 6px 16px; border-radius: 4px; cursor: pointer;
+      border: 1px solid #ccc; background: #fff;
+    }
+    .actions button.primary { background: #1f77b4; border-color: #1f77b4; color: #fff; }
+  </style>
+</head>
+<body>
+  <h2>Series colors</h2>
+  <p class="hint">Pick a color for each measure. Changes save to the workbook.</p>
+  <div id="list"></div>
+
+  <div class="actions">
+    <button id="cancel">Cancel</button>
+    <button id="apply" class="primary">Apply</button>
+  </div>
+
+  <script>
+    /* global tableau */
+    tableau.extensions.initializeDialogAsync().then((payloadStr) => {
+      var payload = {};
+      try { payload = JSON.parse(payloadStr || '{}'); } catch (e) { payload = {}; }
+      var names = payload.names && payload.names.length ? payload.names : ['Series 1'];
+      var defaults = payload.defaults || [];
+      var saved = payload.colors || [];
+
+      // Màu hiển thị ban đầu cho ô j: saved[j] → default[j] (cycle) → xám.
+      function initialColor(j) {
+        return saved[j] || defaults[j % (defaults.length || 1)] || '#8a8d8f';
+      }
+
+      var list = document.getElementById('list');
+      var inputs = [];
+
+      names.forEach(function (name, j) {
+        var row = document.createElement('div');
+        row.className = 'row';
+
+        var label = document.createElement('span');
+        label.className = 'name';
+        label.textContent = name;
+        label.title = name;
+
+        var picker = document.createElement('input');
+        picker.type = 'color';
+        picker.value = normalizeHex(initialColor(j));
+
+        var reset = document.createElement('button');
+        reset.className = 'reset';
+        reset.textContent = 'Reset';
+        reset.onclick = function () {
+          picker.value = normalizeHex(defaults[j % (defaults.length || 1)] || '#8a8d8f');
+        };
+
+        row.appendChild(label);
+        row.appendChild(reset);
+        row.appendChild(picker);
+        list.appendChild(row);
+        inputs.push(picker);
+      });
+
+      document.getElementById('apply').onclick = function () {
+        var colors = inputs.map(function (inp) { return inp.value; });
+        tableau.extensions.ui.closeDialog(JSON.stringify(colors));
+      };
+      document.getElementById('cancel').onclick = function () {
+        // Đóng không lưu: trả payload rỗng đặc biệt → extension bỏ qua.
+        tableau.extensions.ui.closeDialog('');
+      };
+    });
+
+    // <input type="color"> chỉ nhận '#rrggbb'. Chuẩn hoá '#rgb' / thiếu '#'.
+    function normalizeHex(hex) {
+      if (typeof hex !== 'string') return '#8a8d8f';
+      var h = hex.trim().replace(/^#/, '');
+      if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+      if (!/^[0-9a-fA-F]{6}$/.test(h)) return '#8a8d8f';
+      return '#' + h.toLowerCase();
+    }
+  </script>
+</body>
+</html>

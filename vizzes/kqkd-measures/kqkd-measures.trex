@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.kqkdmeasures" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Báo cáo KQKD (đa measure): DÒNG = tên measure; cột 4 nhóm × kỳ tự tính; năm đọc từ Parameter.</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <min-api-version>1.12</min-api-version>
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/kqkd-measures/kqkd-measures.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Measures: 1..N measure → MỖI measure = 1 DÒNG (nhãn = tên measure). Vd P&L: mỗi
+         chỉ tiêu (Tổng thu thuần / Thu lãi / Chi phí…) là 1 measure. -->
+    <encoding id="measures">
+      <display-name>Chỉ tiêu = Measures (mỗi measure 1 dòng)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="15"/>
+      <encoding-icon token="text"/>
+    </encoding>
+
+    <!-- Year: YEAR(date) rời rạc — năm dữ liệu của từng mark (để so sánh). -->
+    <encoding id="year">
+      <display-name>Năm (YEAR của ngày)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Period: 1..3 date-part rời rạc, THỨ TỰ NGOÀI→TRONG (vd Quý rồi Tháng) → cột lồng
+         nhiều cấp: Nhóm → Quý → Tháng. Cấp TRONG CÙNG là mức so sánh (Tháng → MoM theo tháng). -->
+    <encoding id="period">
+      <display-name>Kỳ: Quý / Tháng (thả nhiều để lồng cấp, ngoài→trong)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="3"/>
+      <encoding-icon token="color"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Báo cáo KQKD — Multi-measure (Parameter năm)</text>
+    </resource>
+  </resources>
+</manifest>

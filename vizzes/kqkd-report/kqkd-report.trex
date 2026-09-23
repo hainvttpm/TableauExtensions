@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.kqkd2" extension-version="0.2.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Báo cáo KQKD: chọn 1 năm → tự tính 4 nhóm (Năm báo cáo / Cùng kỳ / MoM% / YoY%) × 12 tháng.</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <min-api-version>1.11</min-api-version>
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/kqkd-report/kqkd-report.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Rows: 1..N dimension → chỉ tiêu (Tổng thu thuần / +Thu thuần lãi / ...), lồng nhau bên trái. -->
+    <encoding id="rows">
+      <display-name>Chỉ tiêu (nhãn hàng)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="5"/>
+      <encoding-icon token="letter-y"/>
+    </encoding>
+
+    <!-- Year + Month = date part RỜI RẠC (pill xanh dương) — đúng kiểu Tableau tạo mặc định
+         khi kéo Order Date, nên thả được ngay, KHÔNG cần chuyển sang continuous.
+         Kéo Order Date → YEAR lên "Năm"; kéo Order Date lần 2 → MONTH lên "Tháng".
+         KHÔNG filter theo năm — phải giữ dữ liệu nhiều năm để so sánh. -->
+    <encoding id="year">
+      <display-name>Năm (YEAR của ngày)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <encoding id="month">
+      <display-name>Tháng (MONTH của ngày)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="color"/>
+    </encoding>
+
+    <!-- Value: 1 measure → giá trị gốc theo tháng (đơn vị vd Triệu VNĐ). -->
+    <encoding id="value">
+      <display-name>Giá trị (measure)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="text"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Báo cáo KQKD — Year Comparison (4 nhóm)</text>
+    </resource>
+  </resources>
+</manifest>

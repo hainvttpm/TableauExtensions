@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.combobarlines" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Combo grouped-bars + multi-line, dual-axis (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <!-- 1.11 = mặc định an toàn: đủ getSummaryDataReaderAsync + getVisualSpecificationAsync -->
+    <min-api-version>1.11</min-api-version>
+    <!-- URL localhost phải KHỚP CHÍNH XÁC đường dẫn dev server phục vụ.
+         npm start (http-server tại repo root, cổng 8765) → path này. -->
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/combo-bar-lines/combo-bar-lines.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Category: 1 dimension rời rạc → 1 cụm cột / 1 điểm line mỗi giá trị -->
+    <encoding id="category">
+      <display-name>Category</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Group / Hierarchy (tùy chọn): thả 1..N dimension = các LEVEL của hierarchy
+         (thứ tự trên shelf = trên→dưới). Mỗi giá trị level hiện tại = 1 khối; bấm nhãn
+         khối để DRILL xuống level kế (lọc theo giá trị vừa bấm), breadcrumb để lên lại.
+         1 field → super-group như cũ (không drill). Bấm '+' trên pill hierarchy trong
+         Tableau để thêm level vào shelf.
+         Bỏ <encoding-icon>: chỉ 'letter-x','letter-y','color','size','text' là token
+         hợp lệ chắc chắn; 'detail'/'bar'/'line' bị parser từ chối. Shelf vẫn chạy. -->
+    <encoding id="group">
+      <display-name>Group / Hierarchy (drill)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="8"/>
+    </encoding>
+
+    <!-- Bars: 1..N measure liên tục → CỤM cột, dùng TRỤC TRÁI (giá trị tuyệt đối) -->
+    <encoding id="bars">
+      <display-name>Bars (trục trái)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="6"/>
+    </encoding>
+
+    <!-- Lines: 1..N measure liên tục → nhiều ĐƯỜNG, dùng TRỤC PHẢI (thường là %) -->
+    <encoding id="lines">
+      <display-name>Lines (trục phải)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="6"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Combo Bars + Lines (Dual Axis)</text>
+    </resource>
+  </resources>
+</manifest>

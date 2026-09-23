@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <worksheet-extension id="com.sonnguyen.vizplatform.barchart" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Bar chart mẫu — nền tảng viz extension (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <!-- 1.11 = mặc định an toàn: đủ getSummaryDataReaderAsync + getVisualSpecificationAsync -->
+    <min-api-version>1.11</min-api-version>
+    <!-- URL localhost phải KHỚP CHÍNH XÁC đường dẫn dev server phục vụ.
+         npm start (http-server tại repo root, cổng 8765) → path này. -->
+    <source-location>
+      <url>http://localhost:8765/src/vizzes/barchart/barchart.html</url>
+    </source-location>
+    <icon/>
+
+    <!-- Category: 1 dimension rời rạc (trục hoành / nhãn cột) -->
+    <encoding id="category">
+      <display-name>Category</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Value: 1 measure liên tục (chiều cao cột) -->
+    <encoding id="value">
+      <display-name>Value</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="bar"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Bar Chart (Platform Sample)</text>
+    </resource>
+  </resources>
+</manifest>
