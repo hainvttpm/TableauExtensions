@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
   <!-- Bản HOSTED (HTTPS). Khác bản localhost DUY NHẤT ở <url>. Giữ NGUYÊN id. -->
-  <worksheet-extension id="com.sonnguyen.vizplatform.kqkdmeasures" extension-version="0.1.0">
+  <worksheet-extension id="evn.vizplatform.kqkdmeasures" extension-version="0.1.0">
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Báo cáo KQKD (đa measure): DÒNG = tên measure; cột 4 nhóm × kỳ tự tính; năm đọc từ Parameter.</description>
-    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <author name="evn" email="evn@evn.com.vn" organization="Tableau Viz Platform" website="https://www.evn.com.vn"/>
     <min-api-version>1.12</min-api-version>
     <source-location>
-      <url>https://sonnguyendataai.github.io/tableau-viz-extensions/src/vizzes/kqkd-measures/kqkd-measures.html</url>
+      <url>https://hainvttpm.github.io/TableauExtensions/vizzes/kqkd-measures/kqkd-measures.html</url>
     </source-location>
     <icon/>
 
