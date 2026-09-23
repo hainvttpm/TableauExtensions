@@ -16,14 +16,14 @@
            chặn nếu sai MIME — IIS cần khai <mimeMap> cho .js/.mjs).
          - Admin: Server → Settings → Extensions → bật + allow-list domain này.
        Thay viz.corp.local bằng hostname nội bộ thật. -->
-  <worksheet-extension id="com.sonnguyen.vizplatform.combobarlines" extension-version="0.1.0">
+  <worksheet-extension id="evn.vizplatform.combobarlines" extension-version="0.1.0">
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Combo grouped-bars + multi-line, dual-axis (BUILD ZONE).</description>
-    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <author name="evn" email="evn@evn.com.vn" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
     <min-api-version>1.11</min-api-version>
     <source-location>
-      <url>https://sonnguyendataai.github.io/tableau-viz-extensions/src/vizzes/combo-bar-lines/combo-bar-lines.html</url>
+      <url>https://hainvttpm.github.io/TableauExtensions/vizzes/combo-bar-lines/combo-bar-lines.html</url>
     </source-location>
     <icon/>
 
