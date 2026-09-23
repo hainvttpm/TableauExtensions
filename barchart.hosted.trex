@@ -3,14 +3,14 @@
   <!-- Bản HOSTED (HTTPS) cho Tableau Cloud/Server hoặc workshop từ xa.
        KHÁC bản localhost DUY NHẤT ở <url>. Giữ NGUYÊN id để không mất settings.
        Thay YOUR-USER/YOUR-REPO bằng GitHub Pages thật (hoặc Netlify URL). -->
-  <worksheet-extension id="com.sonnguyen.vizplatform.barchart" extension-version="0.1.0">
+  <worksheet-extension id="evn.vizplatform.barchart" extension-version="0.1.0">
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Bar chart mẫu — nền tảng viz extension (BUILD ZONE).</description>
-    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <author name="evn" email="evn@evn.com.vn" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
     <min-api-version>1.11</min-api-version>
     <source-location>
-      <url>https://sonnguyendataai.github.io/tableau-viz-extensions/src/vizzes/barchart/barchart.html</url>
+      <url>https://hainvttpm.github.io/TableauExtensions/vizzes/barchart/barchart.html</url>
     </source-location>
     <icon/>
 
