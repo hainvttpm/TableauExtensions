@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <!-- Bản HOSTED cho Tableau Server on-prem. KHÁC bản localhost DUY NHẤT ở <url>.
+       Giữ NGUYÊN id để workbook đã publish không mất settings.
+
+       On-prem, air-gapped:
+         - Trỏ <url> tới web server TĨNH NỘI BỘ (IIS/nginx/Apache), reachable với
+           trình duyệt của MỌI viewer — KHÔNG dùng localhost (đó là máy viewer).
+         - Server chạy HTTPS → URL này cũng phải HTTPS + cert được trình duyệt
+           viewer tin (CA nội bộ). Self-signed lạ sẽ bị chặn im lặng.
+         - Copy lib/ + src/core/ + src/vizzes/combo-bar-lines/ lên web root, GIỮ
+           NGUYÊN cấu trúc path. combo-bar-lines.js là ES module import
+           ../../core/*.js; .html nạp ../../../lib/*.js — thiếu src/core/ sẽ vỡ
+           khi load (bare-import / 404).
+         - Web server PHẢI trả .js với MIME application/javascript (ES module bị
+           chặn nếu sai MIME — IIS cần khai <mimeMap> cho .js/.mjs).
+         - Admin: Server → Settings → Extensions → bật + allow-list domain này.
+       Thay viz.corp.local bằng hostname nội bộ thật. -->
+  <worksheet-extension id="com.sonnguyen.vizplatform.combobarlines" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Combo grouped-bars + multi-line, dual-axis (BUILD ZONE).</description>
+    <author name="son.nguyen" email="son.nguyen@corp.local" organization="Tableau Viz Platform" website="https://viz.corp.local"/>
+    <min-api-version>1.11</min-api-version>
+    <source-location>
+      <url>https://sonnguyendataai.github.io/tableau-viz-extensions/src/vizzes/combo-bar-lines/combo-bar-lines.html</url>
+    </source-location>
+    <icon/>
+
+    <encoding id="category">
+      <display-name>Category</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="1"/>
+      <encoding-icon token="letter-x"/>
+    </encoding>
+
+    <!-- Group / Hierarchy: thả 1..N level (thứ tự shelf = trên→dưới). Bấm nhãn khối
+         để DRILL xuống level kế; breadcrumb để lên lại. 1 field = super-group cũ. -->
+    <encoding id="group">
+      <display-name>Group / Hierarchy (drill)</display-name>
+      <role-spec>
+        <role-type>discrete-dimension</role-type>
+      </role-spec>
+      <fields max-count="8"/>
+    </encoding>
+
+    <encoding id="bars">
+      <display-name>Bars (trục trái)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="6"/>
+    </encoding>
+
+    <encoding id="lines">
+      <display-name>Lines (trục phải)</display-name>
+      <data-spec>
+        <data-type>numeric</data-type>
+      </data-spec>
+      <role-spec>
+        <role-type>continuous-measure</role-type>
+      </role-spec>
+      <fields max-count="6"/>
+    </encoding>
+  </worksheet-extension>
+
+  <resources>
+    <resource id="name">
+      <text locale="en_US">Combo Bars + Lines (Dual Axis)</text>
+    </resource>
+  </resources>
+</manifest>
