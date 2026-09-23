@@ -3,7 +3,7 @@
   <!-- Bản HOSTED (HTTPS) cho Tableau Cloud/Server hoặc workshop từ xa.
        KHÁC bản localhost DUY NHẤT ở <url>. Giữ NGUYÊN id để không mất settings.
        Thay YOUR-USER/YOUR-REPO bằng GitHub Pages thật (hoặc Netlify URL). -->
-  <worksheet-extension id="com.sonnguyen.vizplatform.pivottable" extension-version="0.1.0">
+  <worksheet-extension id="evn.vizplatform.pivottable" extension-version="0.1.0">
     <default-locale>en_US</default-locale>
     <name resource-id="name"/>
     <description>Bảng ma trận (pivot/crosstab) header nhóm nhiều tầng — mẫu báo cáo KQKD (BUILD ZONE).</description>
